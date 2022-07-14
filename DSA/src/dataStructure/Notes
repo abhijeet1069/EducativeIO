@@ -1,0 +1,44 @@
+	1) Remove even integers from arrays
+		Main problem was not filtering but size of resultant array
+		Filter all odd elements of input array into new array with same length and keep count of elements entered
+		Create result array with length count
+		Copy elements from new array to result array
+	
+	2) Merge two sorted array
+		Max integer logic removed. Below logic is general and works for all sort of array types
+		while(i < n1 && j < n2)
+		while(i < n1) { //consume remaining array
+		while(j < n2) { //consume remaining array
+		
+	3) Find two numbers that add up to 'n'
+	My Approach:
+		Arrays.sort -> n*lg(n)
+		Arrays.binarySearch(arr,sum-element) for each element -> n*lg(n)
+	Better Approach:
+		Use two pointers approach in sorted array.
+		Fix two pointers left, right on each side of array.
+		continue till left < right
+			if(arr[left]+arr[right] < sum)
+				Increment left //sum increases
+			else if(arr[left]+arr[right] > sum)
+				Decrement left //sum decreases
+			else
+				initialize result
+				
+	4) Arrays of products of all elements except itself
+	My Approach:
+		Find product of all elements. And divide by array element to get result. Problem occurs with 0.
+	Better Approach:
+		Traverse left product and traverse right product.
+	
+	5) First non-repeating integer in an array
+		Heavy use of HashMap. R/W operations are difficult.
+		
+	6) Find second max
+	if(arr[i] > max){
+	            secMax = max;
+	            max = arr[i];
+	          }
+	//If secondMax finds a greater value then it will update. Also, not interfere with max.
+	          else if((secMax < arr[i]) && (arr[i] != max)) 
+              secMax = arr[i];

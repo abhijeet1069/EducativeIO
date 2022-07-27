@@ -1,16 +1,40 @@
-	1) Remove even integers from arrays
-		Main problem was not filtering but size of resultant array
-		Filter all odd elements of input array into new array with same length and keep count of elements entered
-		Create result array with length count
-		Copy elements from new array to result array
-	
-	2) Merge two sorted array
+
+	1) Merge two sorted array
 		Max integer logic removed. Below logic is general and works for all sort of array types
-		while(i < n1 && j < n2)
-		while(i < n1) { //consume remaining array
-		while(j < n2) { //consume remaining array
 		
-	3) Find two numbers that add up to 'n'
+		public static int[] mergeArrays(int[] arr1, int[] arr2) {  
+		      int n1 = arr1.length;
+		      int n2 = arr2.length;
+		      int i = 0,j = 0,k = 0;
+		      int[] res = new int[n1+n2];
+		      
+		      while(i < n1 && j < n2) { //continues till common min overlap
+		        if(arr1[i] < arr2[j]) {
+		          res[k] = arr1[i];
+		          i++;
+		        }
+		          
+		        else {
+		          res[k] = arr2[j];
+		          j++;
+		        }
+		        k++;
+		      }
+		      
+		      while(i < n1) { //consume remaining array
+		        res[k] = arr1[i];
+		        k++;
+		        i++;
+		      }
+		      while(j < n2) {
+		        res[k] = arr2[j];
+		        k++;
+		        j++;
+		      }
+		      return res;
+		    } 
+		
+	2) Find two numbers that add up to 'n'
 	My Approach:
 		Arrays.sort -> n*lg(n)
 		Arrays.binarySearch(arr,sum-element) for each element -> n*lg(n)
@@ -25,20 +49,127 @@
 			else
 				initialize result
 				
-	4) Arrays of products of all elements except itself
+	3) Arrays of products of all elements except itself
 	My Approach:
 		Find product of all elements. And divide by array element to get result. Problem occurs with 0.
 	Better Approach:
 		Traverse left product and traverse right product.
 	
-	5) First non-repeating integer in an array
-		Heavy use of HashMap. R/W operations are difficult.
-		
-	6) Find second max
+	public static int[] findProduct(int arr[])  {    
+	        int[] res = new int[arr.length];
+	        int temp = 1;
+	        for(int i= 0; i < arr.length; i++) { //left scan
+	            res[i] = temp;
+	            temp *= arr[i];
+	        }
+	        
+	        temp = 1;
+	        for(int i = arr.length-1; i >= 0; i--) { //right scan
+	            res[i] *= temp;
+	            temp *= arr[i];
+	        }
+	        return res; 
+	   } 
+	
+	4) Find second max
 	if(arr[i] > max){
 	            secMax = max;
 	            max = arr[i];
 	          }
 	//If secondMax finds a greater value then it will update. Also, not interfere with max.
 	          else if((secMax < arr[i]) && (arr[i] != max)) 
-              secMax = arr[i];
+	              secMax = arr[i];
+	5) Max Sum subarray
+		//Kadane Algorithm
+		public static int findMaxSumSubArray(int[] arr) {
+		        int currentMax = Integer.MIN_VALUE;
+		        int current = 0;
+		        for(int i : arr) {
+		            current = Math.max(current+i, i);
+		            currentMax = Math.max(currentMax, current);
+		        }
+		        return currentMax;
+		    }
+		
+	6) Binary Search (Standard)
+		int left = 0, right = nums.length-1;
+		        while(left <= right) {
+		            int mid = left+(right-left)/2;
+		            if(nums[mid] == target)
+		                return mid;
+		            else if(nums[mid] < target) //search right
+		                left = mid+1;
+		            else
+		                right = mid-1;
+		        }
+		        return -1;
+		
+	7) Smallest common number in 3 arrays (Good problem)
+		static Integer findLeastCommonNumber(int[] arr1, int[] arr2, int[] arr3) {
+		        int i = 0, j = 0 , k = 0;
+		        int res = -1;
+		        while(i < arr1.length && j < arr2.length && k < arr3.length) {
+		            if(arr1[i] == arr2[j] && arr2[j] == arr3[k]) {
+		                res = arr1[i];
+		                break;
+		            }
+		            else if(arr1[i] < arr2[j] && arr1[i] < arr3[k])//arr1 is least
+		                i++;
+		            else if(arr2[j] < arr1[i] && arr2[j] < arr3[k])//arr2 is least
+		                j++;
+		            else if(arr3[k] < arr2[j] && arr3[k] < arr1[i])//arr3 is least
+		                k++;
+		        }
+		        return res;
+		    }
+	8) Find low/high index of an element in a sorted array
+		//Better than binary search. It may/may not give the first occurrence of element. That demerit it had over linear search.
+		//But now even that is optimized. 
+		static int findLowIndex(int[] nums, int target) {
+		        int index = -1;
+		            int left = 0, right = nums.length-1;
+		            while(left <= right) {
+		                int mid = left + (right-left)/2;
+		                if(nums[mid] == target) {
+		                    index = mid;
+		                    right = mid-1;
+		                }
+		                else if(nums[mid] < target) //search right
+		                    left = mid+1;
+		                else //search left
+		                    right = mid-1;
+		            }
+		            return index;
+		    }
+		    static int findHighIndex(int[] nums, int target) {
+		        int index = -1;
+		            int left = 0, right = nums.length-1;
+		            while(left <= right) {
+		                int mid = left + (right-left)/2;
+		                if(nums[mid] == target) {
+		                    index = mid;
+		                    left = mid+1;
+		                }
+		                else if(nums[mid] < target) //search right
+		                    left = mid+1;
+		                else //search left
+		                    right = mid-1;
+		            }
+		            return index;
+		    }
+		
+	9) Stock Buy Sell to maximize profit
+				
+				
+				//left is day to buy, right is day to sell
+				int left = 0, right = 1;
+				        int currProfit, maxProfit = Integer.MIN_VALUE;
+				        for(int i = 0; i < stockNums.length; i++) {
+				            currProfit = stockNums[i]-stockNums[left];
+				            if(maxProfit < currProfit) {
+				                maxProfit = currProfit;
+				                right = i;
+				            }
+				            else if(stockNums[left] > stockNums[i]) //smallest element
+				                left = i;
+				        }
